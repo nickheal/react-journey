@@ -1,46 +1,32 @@
-import React, { useState } from 'react';
-
-function getScrimStyle(step) {
-  const boundingRect = step.getBoundingClientRect();
-  const left = boundingRect.left;
-  const right = left + boundingRect.width;
-  const top = boundingRect.top;
-  const bottom = top + boundingRect.height;
-  const { innerHeight, innerWidth } = window;
-  return {
-    clipPath: `polygon(
-      0px 0px,
-      0px ${innerHeight}px,
-      ${left}px ${innerHeight}px,
-      ${left}px ${top}px,
-      ${right}px ${top}px,
-      ${right}px ${bottom}px,
-      ${left}px ${bottom}px,
-      ${left}px ${innerHeight}px,
-      ${innerWidth}px ${innerHeight}px,
-      ${innerWidth}px 0px
-    )`,
-    backgroundColor: '#333',
-    height: '100%',
-    left: 0,
-    opacity: 0.75,
-    position: 'fixed',
-    top: 0,
-    transition: 'clip-path 500ms ease-in-out',
-    width: '100%',
-    zIndex: 1
-  };
-}
+import React, { useContext, useState } from 'react';
+import JourneyContext from './JourneyContext';
+import getScrimStyle from './getScrimStyle';
+import getTooltipStyle from './getTooltipStyle';
 
 const Journey = ({
+  Component,
   steps
 }) => {
+  const { stop } = useContext(JourneyContext);
   const [currentStep, setCurrentStep] = useState(0);
 
-  console.log(steps, currentStep);
+  function onClickNext() {
+    if (currentStep >= steps.length - 1) return stop();
+    setCurrentStep(currentStep + 1);
+  }
 
   return (
-    <div style={getScrimStyle(steps[currentStep]?.el)} />
+    <>
+      <div style={getScrimStyle(steps[currentStep]?.el)} />
+      <div style={getTooltipStyle(steps[currentStep]?.el)}>
+        <Component
+          currentStep={currentStep}
+          message={steps[currentStep]?.message}
+          onClickNext={onClickNext}
+          totalSteps={steps.length}
+        />
+      </div>
+    </>
   )
 };
 

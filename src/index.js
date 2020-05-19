@@ -5,4 +5,4 @@ export const useJourney = () => useContext(JourneyContext);
 
 export { default as JourneyProvider } from './JourneyProvider';
 export { default as JourneyStep } from './JourneyStep';
-// // export { default as JourneyTip } from './JourneyTip';
+export { default as JourneyComponent } from './JourneyComponent';

@@ -1,40 +1,8 @@
-import { createContext } from 'react';
+import { useContext } from 'react';
+import JourneyContext from './JourneyContext';
 
-const ContextJourney = createContext({
-  active: false,
-  steps: []
-});
+export const useJourney = () => useContext(JourneyContext);
 
-export { default as Tour } from './Tour';
-export { default as TourItem } from './TourItem';
-export { default as TourTip } from './TourTip';
-
-export function register(el) {
-  tourStore.update(store => ({
-    ...store,
-    items: [...store.items, el]
-  }));
-};
-
-export function run() {
-  tourStore.update(store => ({
-    ...store,
-    active: true
-  }));
-};
-
-export function stop() {
-  tourStore.update(store => ({
-    ...store,
-    active: false
-  }));
-};
-
-export function unregister(el) {
-  tourStore.update(store => ({
-    ...store,
-    items: store.items.filter(item => item !== el)
-  }));
-}
-
-export const subscribe = tourStore.subscribe.bind(tourStore);
+export { default as JourneyProvider } from './JourneyProvider';
+export { default as JourneyStep } from './JourneyStep';
+export { default as JourneyComponent } from './JourneyComponent';

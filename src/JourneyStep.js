@@ -1,17 +1,19 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { node, string } from 'prop-types';
-import { register, unregister } from './index';
+import JourneyContext from './JourneyContext';
 
 const TourStep = ({
   children,
   message
 }) => {
+  const { register, unRegister } = useContext(JourneyContext);
   const el = useRef(null);
 
   useEffect(() => {
-    register(el.current);
-    return () => unregister(el.current);
-  }, []);
+    const { current } = el;
+    register(current, message);
+    return () => unRegister(current);
+  }, [message, register, unRegister]);
 
   return (
     <div ref={el}>

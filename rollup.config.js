@@ -1,6 +1,7 @@
 import babel from 'rollup-plugin-babel';
 
 export default {
+  external: ['prop-types', 'react'],
   input: 'src/index.js',
   output: [
     {

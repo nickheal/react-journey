@@ -7,7 +7,13 @@
 
 ## Purpose
 
-React components to create an interactive journey.
+React components to create a delightful interactive journey.
+
+## Table of Contents
+1. [Installation](#installation)
+2. [How to use](#how-to-use)
+3. [Issues](#issues)
+4. [Contributions](#contributions)
 
 ## Installation
 
@@ -37,7 +43,7 @@ import { JourneyStep } from 'react-journey';
 
 const MyApp = () => (
   <JourneyStep message="Header">
-    <p>A step in the tour!</p>
+    <p>A step in the journey!</p>
   </JourneyStep>
 );
 ```
@@ -61,3 +67,11 @@ function App() {
   );
 }
 ```
+
+## Issues
+
+Please raise any issues on the [GitHub repo](https://github.com/nickheal/react-journey/issues).
+
+## Contributions
+
+All contributions are welcome, and actively encouraged! 😁

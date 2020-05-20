@@ -1,36 +1,77 @@
-import { renderHook } from '@testing-library/react-hooks';
-import useMultiPossibility from 'use-multi-possibility';
-import usePoll from '../../src/index';
+import React, { useRef } from 'react';
+import { fireEvent, render } from '@testing-library/react';
+import { JourneyComponent, JourneyProvider, JourneyStep, useJourney } from 'src/index';
 
-const flushPromises = () => new Promise(setImmediate);
+describe('Journey', () => {
+  it('should run through steps added using the JourneyStep component', () => {
+    const TestApp = () => {
+      const { run } = useJourney();
 
-describe('usePoll', () => {
-  beforeEach(() => {
-    jest.useFakeTimers();
+      return (
+        <>
+          <JourneyStep message="Hi. I'm a message!">
+            <p>A component to wrap</p>
+          </JourneyStep>
+          <JourneyStep message="Hi. I'm a second message!">
+            <p>A second component to wrap</p>
+          </JourneyStep>
+          <button data-testid="start-tour" onClick={run}></button>
+        </>
+      );
+    };
+
+    const { getByTestId, getByText, queryByText } = render(
+      <JourneyProvider Component={JourneyComponent}>
+        <TestApp />
+      </JourneyProvider>
+    );
+
+    fireEvent.click(getByTestId('start-tour'));
+
+    expect(getByText('Hi. I\'m a message!'));
+
+    fireEvent.click(getByText('Next'));
+
+    expect(getByText('Hi. I\'m a second message!'));
+
+    fireEvent.click(getByText('Done'));
+
+    expect(queryByText('Hi. I\'m a message!')).toBeNull();
   });
 
-  useMultiPossibility(([arg]) => {
-    it(`should throw an error if no function callback is provided (${JSON.stringify(arg)})`, () => {
-      expect(() => usePoll(arg)).toThrowError(TypeError);
-    });
-  }, [[undefined, null, 0, 'string', [], {}]]);
+  it('should run through steps added using the useStep hook', () => {
+    const TestApp = () => {
+      const el1 = useRef(null);
+      const el2 = useRef(null);
+      const { run, useStep } = useJourney();
+      useStep(el1, 'Hi. I\'m a message!');
+      useStep(el2, 'Hi. I\'m a second message!');
 
-  it('should call the function immediately, and then after each timeout finishes', async () => {
-    const callback = jest.fn();
-    renderHook(() => usePoll(callback));
-    await flushPromises();
-    jest.runOnlyPendingTimers();
-    expect(callback).toHaveBeenCalledTimes(2);
-  });
+      return (
+        <>
+          <p ref={el1}>A component to wrap</p>
+          <p ref={el2}>A second component to wrap</p>
+          <button data-testid="start-tour" onClick={run}></button>
+        </>
+      );
+    };
 
-  it('should stop polling when the component is unmounted', async () => {
-    const callback = jest.fn();
-    const { unmount } = renderHook(() => usePoll(callback));
-    await flushPromises();
-    jest.runOnlyPendingTimers();
-    unmount();
-    await flushPromises();
-    jest.runOnlyPendingTimers();
-    expect(callback).toHaveBeenCalledTimes(2);
+    const { getByTestId, getByText, queryByText } = render(
+      <JourneyProvider Component={JourneyComponent}>
+        <TestApp />
+      </JourneyProvider>
+    );
+
+    fireEvent.click(getByTestId('start-tour'));
+
+    expect(getByText('Hi. I\'m a message!'));
+
+    fireEvent.click(getByText('Next'));
+
+    expect(getByText('Hi. I\'m a second message!'));
+
+    fireEvent.click(getByText('Done'));
+
+    expect(queryByText('Hi. I\'m a message!')).toBeNull();
   });
 });

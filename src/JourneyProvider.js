@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import JourneyContext from './JourneyContext';
 import Journey from './Journey';
 
@@ -11,7 +11,6 @@ const JourneyProvider = ({
 
   const [value] = useState({
     register(el, message) {
-      console.log(el, message, steps);
       setSteps(prevSteps => [...prevSteps, { el, message }])
     },
     run() {
@@ -22,6 +21,13 @@ const JourneyProvider = ({
     },
     unRegister(el) {
       setSteps(prevSteps => prevSteps.filter(step => step.el !== el));
+    },
+    useStep(el, message) {
+      return useEffect(() => {
+        const { current } = el;
+        value.register(current, message);
+        return () => value.unRegister(current);
+      });
     }
   });
 

@@ -12,8 +12,9 @@ React components to create a delightful interactive journey.
 ## Table of Contents
 1. [Installation](#installation)
 2. [How to use](#how-to-use)
-3. [Issues](#issues)
-4. [Contributions 😁](#contributions-😁)
+3. [Advanced use](#advanced-use)
+4. [Issues](#issues)
+5. [Contributions 😁](#contributions-😁)
 
 ## Installation
 
@@ -64,6 +65,47 @@ function App() {
 
   return (
     <p>My app</p>
+  );
+}
+```
+
+## Advanced use
+
+You can use the `useStep` hook if you don't want to use the `JourneyStep` component. If you don't want to alter your HTML structure for example.
+
+```javascript
+import React, { useEffect, useRef } from 'react';
+import { useJourney } from 'react-journey';
+
+function App() {
+  const { useStep } = useJourney();
+  const el = useRef(null);
+  useStep(el, 'This is the message for this element');
+
+  return (
+    <p ref={el}>My app</p>
+  );
+}
+```
+
+You can manually register—and unregister—elements from the tour if you don't want to use the `JourneyStep` component or the `useStep` hook. If you don't want to alter your HTML structure for example.
+
+```javascript
+import React, { useEffect, useRef } from 'react';
+import { useJourney } from 'react-journey';
+
+function App() {
+  const { register, unRegister } = useJourney();
+  const el = useRef(null);
+
+  useEffect(() => {
+    const { current } = el;
+    register(current, 'This is the message for this element');
+    return () => unRegister(current);
+  }, [register, unRegister]);
+
+  return (
+    <p ref={el}>My app</p>
   );
 }
 ```

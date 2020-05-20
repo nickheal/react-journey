@@ -13,7 +13,7 @@ React components to create a delightful interactive journey.
 1. [Installation](#installation)
 2. [How to use](#how-to-use)
 3. [Issues](#issues)
-4. [Contributions](#contributions)
+4. [Contributions 😁](#contributions-😁)
 
 ## Installation
 
@@ -72,6 +72,6 @@ function App() {
 
 Please raise any issues on the [GitHub repo](https://github.com/nickheal/react-journey/issues).
 
-## Contributions
+## Contributions 😁
 
-All contributions are welcome, and actively encouraged! 😁
+All contributions are welcome, and actively encouraged!

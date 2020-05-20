@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import { node, string } from 'prop-types';
 import JourneyContext from './JourneyContext';
 
-const TourStep = ({
+const JourneyStep = ({
   children,
   message
 }) => {
@@ -22,9 +22,9 @@ const TourStep = ({
   );
 }
 
-TourStep.propTypes = {
+JourneyStep.propTypes = {
   children: node.isRequired,
   message: string.isRequired
 };
 
-export default TourStep;
+export default JourneyStep;

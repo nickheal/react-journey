@@ -4,7 +4,7 @@ import { JourneyComponent, JourneyProvider, JourneyStep, useJourney } from 'src/
 
 describe('Journey', () => {
   it('should run through steps added using the JourneyStep component', () => {
-    const TestApp = () => {
+    const TestApp = jest.fn(() => {
       const { run } = useJourney();
 
       return (
@@ -18,7 +18,7 @@ describe('Journey', () => {
           <button data-testid="start-tour" onClick={run}></button>
         </>
       );
-    };
+    });
 
     const { getByTestId, getByText, queryByText } = render(
       <JourneyProvider Component={JourneyComponent}>
@@ -37,6 +37,9 @@ describe('Journey', () => {
     fireEvent.click(getByText('Done'));
 
     expect(queryByText('Hi. I\'m a message!')).toBeNull();
+
+    /** Test that the TestApp isn't getting re-rendered each time the journey state changes */
+    expect(TestApp).toHaveBeenCalledTimes(1);
   });
 
   it('should run through steps added using the useStep hook', () => {
